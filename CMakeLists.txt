@@ -14,6 +14,7 @@ set(programs_src_dir "src/main")
 
 set(external_include_dir "external_dependencies/include")
 set(external_lib_dir "external_dependencies/lib")
+set(external_objs_dir "external_dependencies/objs")
 
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
     "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -27,6 +28,7 @@ elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 include_directories(${external_include_dir})
+include_directories(${external_objs_dir})
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY release/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY release/lib)
@@ -37,6 +39,15 @@ file(GLOB_RECURSE external_libraries FOLLOW_SYMLINKS "${external_lib_dir}/*.*")
 file(GLOB_RECURSE objs_src_files "${objs_src_dir}/*.cpp")
 foreach(obj_src_file  ${objs_src_files})
 	string(REGEX REPLACE "(^(.*/)*${objs_src_dir}/(.*/)*)|(\.cpp)" "" obj_binary ${obj_src_file})
+	string(APPEND obj_binary ".o")
+	add_library(${obj_binary} OBJECT ${obj_src_file})
+	list(APPEND all_obj_binaries $<TARGET_OBJECTS:${obj_binary}>)
+endforeach()
+
+file(GLOB_RECURSE objs_src_files FOLLOW_SYMLINKS "${external_objs_dir}/*.cpp")
+message(STATUS ${objs_src_files})
+foreach(obj_src_file  ${objs_src_files})
+	string(REGEX REPLACE "(^(.*/)*${external_objs_dir}/(.*/)*)|(\.cpp)" "" obj_binary ${obj_src_file})
 	string(APPEND obj_binary ".o")
 	add_library(${obj_binary} OBJECT ${obj_src_file})
 	list(APPEND all_obj_binaries $<TARGET_OBJECTS:${obj_binary}>)

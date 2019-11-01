@@ -4,10 +4,12 @@ PROJECT_ROOT=$(realpath $(dirname $0))
 DEPENDENCIES_DIR="$PROJECT_ROOT/external_dependencies"
 DEPENDENCIES_LIB_DIR="$DEPENDENCIES_DIR/lib"
 DEPENDENCIES_INCLUDE_DIR="$DEPENDENCIES_DIR/include"
+DEPENDENCIES_OBJS_DIR="$DEPENDENCIES_DIR/objs"
 DEPENDENCY_MANAGER_DIR="$PROJECT_ROOT/.assertions/dependency_manager"
 
 mkdir -p "$DEPENDENCIES_LIB_DIR"
 mkdir -p "$DEPENDENCIES_INCLUDE_DIR"
+mkdir -p "$DEPENDENCIES_OBJS_DIR"
 
 ############### Command Line Interface ##################
 print_help () {
