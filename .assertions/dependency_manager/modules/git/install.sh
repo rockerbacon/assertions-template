@@ -57,7 +57,7 @@ if [ "$GIT_COMMIT" != "" ]; then
 	fi
 else
 	LASTEST_COMMIT=$(git log | grep -m 1 "^commit" | sed "s/commit //")
-	echo "Info: git commit not specified, using latest ($LASTEST_COMMIT)" 1>&2
+	echo "Info: commit not specified, using latest ($LASTEST_COMMIT)" 1>&2
 	GIT_COMMIT=$LASTEST_COMMIT
 fi
 
@@ -67,8 +67,14 @@ if [ -f "$DEPENDENCY_REPOSITORY_DIR/.assertions/language" ]; then
 		if [ -d "$DEPENDENCY_REPOSITORY_DIR/build" ]; then
 			echo "Info: dependency '$GIT_URL' already built" 1>&2
 		else
-			"$DEPENDENCY_REPOSITORY_DIR/build.sh"
-			if [ ! -d "$DEPENDENCY_REPOSITORY_DIR/build/release/lib" ]; then
+			echo "Info: building dependency '$GIT_URL'..." 1>&2
+			DEPENDENCY_BUILD_OUTPUT=$("$DEPENDENCY_REPOSITORY_DIR/build.sh" 2>&1)
+			if [ "$?" != "0" ]; then
+				echo "Error: failed to build dependency '$GIT_URL':"
+				echo $DEPENDENCY_BUILD_OUTPUT
+				rollback_installation
+				exit 1
+			elif [ ! -d "$DEPENDENCY_REPOSITORY_DIR/build/release/lib" ]; then
 				echo "Error: dependency is not a lib"
 				rollback_installation
 				exit 1
@@ -81,7 +87,7 @@ if [ -f "$DEPENDENCY_REPOSITORY_DIR/.assertions/language" ]; then
 		rollback_installation
 		exit 1
 	fi
-	echo "Info: dependency configured: $GIT_URL $GIT_COMMIT" 1>&2
+	echo "Info: dependency configured: $GIT_URL $GIT_COMMIT"
 else
 	echo "Error: dependencies can only be from projects using the Assertions C++ Framework"
 	rollback_installation
