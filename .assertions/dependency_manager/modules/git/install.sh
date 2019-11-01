@@ -46,8 +46,8 @@ else
 	fi
 fi
 
+cd "$DEPENDENCY_REPOSITORY_DIR"
 if [ "$GIT_COMMIT" != "" ]; then
-	cd "$DEPENDENCY_REPOSITORY_DIR"
 	git checkout $GIT_COMMIT
 	CHECKOUT_STATUS=$?
 	if [ "$CHECKOUT_STATUS" != "0" ]; then
