@@ -41,6 +41,7 @@ if [ "$1" == "--help" ]; then
 elif [ "$1" == "add" ]; then
 	shift
 	source "$PROJECT_ROOT/.assertions/dependency_manager/add.sh"
+	touch "$DEPENDENCY_MANAGER_DIR"
 elif [ "$1" == "remove" ]; then
 	shift
 	source "$PROJECT_ROOT/.assertions/dependency_manager/remove.sh"
@@ -67,6 +68,7 @@ elif [ "$1" == "install" ]; then
 	else
 		cd "$DEPENDENCY_MANAGER_DIR/modules"
 		source "$DEPENDENCY_MANAGER_DIR/install.sh"
+		touch "$DEPENDENCY_MANAGER_DIR"
 	fi
 else
 	echo "Error: unknown action '$1'"
