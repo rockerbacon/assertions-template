@@ -16,6 +16,8 @@ set(external_include_dir "external_dependencies/include")
 set(external_lib_dir "external_dependencies/lib")
 set(external_objs_dir "external_dependencies/objs")
 
+set_property(GLOBAL PROPERTY TARGET_MESSAGES OFF)
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" OR
     "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 
