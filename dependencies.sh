@@ -45,6 +45,7 @@ elif [ "$1" == "add" ]; then
 elif [ "$1" == "remove" ]; then
 	shift
 	source "$PROJECT_ROOT/.assertions/dependency_manager/remove.sh"
+	touch "$DEPENDENCY_MANAGER_DIR"
 elif [ "$1" == "clean" ]; then
 	echo "Are you sure you want to delete all downloaded dependencies? (y/n)"
 	read CONFIRMATION

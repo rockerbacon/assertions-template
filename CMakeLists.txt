@@ -37,6 +37,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY release/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY release/bin)
 
 file(GLOB_RECURSE external_libraries FOLLOW_SYMLINKS "${external_lib_dir}/*.*")
+find_package(Threads)
 
 file(GLOB_RECURSE objs_src_files "${objs_src_dir}/*.cpp")
 foreach(obj_src_file  ${objs_src_files})
@@ -66,7 +67,7 @@ foreach(test_src_file ${tests_src_files})
 		RUNTIME_OUTPUT_DIRECTORY "tests"
 	)
 	target_include_directories(${test_binary} PRIVATE ${objs_src_dir})
-	target_link_libraries(${test_binary} ${external_libraries})
+	target_link_libraries(${test_binary} ${external_libraries} Threads::Threads)
 	add_test(NAME ${test_binary} COMMAND ${test_binary})
 endforeach()
 
@@ -76,7 +77,7 @@ foreach(program_src_file ${programs_src_files})
 	string(REGEX REPLACE "/" "_" program_binary ${program_binary})
 	add_executable(${program_binary} ${program_src_file} ${all_obj_binaries})
 	target_include_directories(${program_binary} PRIVATE ${objs_src_dir})
-	target_link_libraries(${program_binary} ${external_libraries})
+	target_link_libraries(${program_binary} ${external_libraries} Threads::Threads)
 endforeach()
 
 if (${BUILD_STATIC_LIBRARY})
