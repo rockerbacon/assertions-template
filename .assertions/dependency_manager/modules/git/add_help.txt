@@ -1,8 +1,9 @@
 Help:
 Add dependency on source files of projects stored in git repositories. Branch 'master' is always the one used during installation
 
-Usage: ./dependencies.sh add git GIT_URL [GIT_COMMIT] [OBJS_DIR] [INCLUDE_DIR]
+Usage: ./dependencies.sh add git GIT_URL [GIT_COMMIT] [LOCAL_ONLY] [OBJS_DIR] [INCLUDE_DIR]
 
+LOCAL_ONLY: boolean value which tells whether this dependency has to be installed recursively when adding this project as a dependency in another one. Default is false
 GIT_URL: HTTP URL used to clone git repositories. SSH URLs are not acceptable, since SSH may not be configured in every developer environment
 GIT_COMMIT: git commit to use. May be a git tag. The lastest tagged commit will be used by default.
 	IMPORTANT: the commit will be frozen, meaning all dependency installations will always use the same version. This is true even if the commit is not specified

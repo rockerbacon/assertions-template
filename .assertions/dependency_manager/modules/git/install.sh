@@ -5,6 +5,7 @@ PROJECT_ROOT=$(realpath "$SCRIPT_DIR/../../../..")
 MODULE_ROOT=$(realpath "$SCRIPT_DIR")
 DEPENDENCIES_DIR="$PROJECT_ROOT/external_dependencies"
 DEPENDENCIES_OBJ_DIR="$DEPENDENCIES_DIR/objs"
+DEPENDENCIES_LOCAL_OBJ_DIR="$DEPENDENCIES_DIR/local_objs"
 REPOSITORIES_DIR="$DEPENDENCIES_DIR/git"
 
 rollback_installation () {
@@ -23,8 +24,9 @@ if [ "$GIT_URL" == "" ]; then
 	exit 1
 fi
 GIT_COMMIT="$2"
-GIT_OBJS_DIR="$3"
-GIT_INCLUDE_DIR="$4"
+LOCAL_ONLY="$3"
+GIT_OBJS_DIR="$4"
+GIT_INCLUDE_DIR="$5"
 ##################### Command Line Interface ##########################
 
 GIT_URL_IS_HTTP=$(echo "$GIT_URL" | grep -oe "^http")
@@ -85,7 +87,15 @@ if [ ! -d "$DEPENDENCY_REPOSITORY_DIR/$GIT_INCLUDE_DIR" ]; then
 		exit 1
 fi
 
-DEPENDENCY_INSTALL_DIR="$DEPENDENCIES_OBJ_DIR/$RELATIVE_DEPENDENCY_REPOSITORY_DIR"
+if [ "$LOCAL_ONLY" == "" ]; then
+	LOCAL_ONLY="false"
+fi
+
+if [ "$LOCAL_ONLY" == "false" ]; then
+	DEPENDENCY_INSTALL_DIR="$DEPENDENCIES_OBJ_DIR/$RELATIVE_DEPENDENCY_REPOSITORY_DIR"
+else
+	DEPENDENCY_INSTALL_DIR="$DEPENDENCIES_LOCAL_OBJ_DIR/$RELATIVE_DEPENDENCY_REPOSITORY_DIR"
+fi
 mkdir -p "$DEPENDENCY_INSTALL_DIR"
 
 echo "Info: linking '$DEPENDENCY_REPOSITORY_DIR/$GIT_OBJS_DIR/*' in '$DEPENDENCY_INSTALL_DIR/'" 1>&2
@@ -105,5 +115,5 @@ if [ -f "$DEPENDENCY_REPOSITORY_DIR/dependencies.sh" ]; then
 	fi
 fi
 
-echo "Info: dependency configured: $GIT_URL $GIT_COMMIT \"$GIT_OBJS_DIR\" \"$GIT_INCLUDE_DIR\""
+echo "Info: dependency configured: $GIT_URL $GIT_COMMIT $LOCAL_ONLY \"$GIT_OBJS_DIR\" \"$GIT_INCLUDE_DIR\""
 
