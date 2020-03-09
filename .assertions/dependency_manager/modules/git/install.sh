@@ -60,7 +60,7 @@ until [ -z "$1" ]; do
 
 	--before-linking)
 		BEFORE_LINKING_SCRIPT="$2"
-		FROZEN_ARGS="$FROZEN_ARGS --before-linking '$POST_DOWNLOAD_SCRIPT'"
+		FROZEN_ARGS="$FROZEN_ARGS --before-linking '$BEFORE_LINKING_SCRIPT'"
 		shift
 	;;
 
